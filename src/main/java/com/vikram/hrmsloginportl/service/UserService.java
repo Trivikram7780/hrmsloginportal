@@ -1,6 +1,7 @@
 package com.vikram.hrmsloginportl.service;
 
 import com.vikram.hrmsloginportl.Entity.Usersdata;
+import com.vikram.hrmsloginportl.dto.TokenDto;
 import com.vikram.hrmsloginportl.repository.MyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,7 @@ public class UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
     public Usersdata saveInDb(Usersdata user) {
@@ -28,17 +30,14 @@ public class UserService {
         return repo.save(user);
     }
 
-    public String verify(Usersdata user) {
-
-      System.out.println(user.getUsername());
+    public boolean verify(Usersdata user) {
       Authentication authentication =
               authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 
-      System.out.println(user.getUsername());
-
       if(authentication.isAuthenticated())
-          return jwtService.generateToken(user.getUsername());
-
-      return "Fail";
+          return true;
+      else{
+          return false;
+      }
     }
 }
