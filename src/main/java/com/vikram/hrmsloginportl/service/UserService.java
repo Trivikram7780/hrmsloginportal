@@ -1,7 +1,6 @@
 package com.vikram.hrmsloginportl.service;
 
 import com.vikram.hrmsloginportl.Entity.Usersdata;
-import com.vikram.hrmsloginportl.dto.TokenDto;
 import com.vikram.hrmsloginportl.repository.MyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +32,7 @@ public class UserService {
     public boolean verify(Usersdata user) {
       Authentication authentication =
               authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+
 
       if(authentication.isAuthenticated())
           return true;
