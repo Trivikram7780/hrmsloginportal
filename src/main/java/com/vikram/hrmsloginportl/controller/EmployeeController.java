@@ -2,6 +2,7 @@ package com.vikram.hrmsloginportl.controller;
 
 
 import com.vikram.hrmsloginportl.Entity.Usersdata;
+import com.vikram.hrmsloginportl.dto.AttendanceReloadResponse;
 import com.vikram.hrmsloginportl.dto.TokenDto;
 import com.vikram.hrmsloginportl.dto.UserDetails;
 import com.vikram.hrmsloginportl.service.AttendanceService;
@@ -29,6 +30,7 @@ public class EmployeeController {
 
 
     @PostMapping("/register")
+    @CrossOrigin(origins = "http://localhost:3000")
     public Usersdata registerUser(@RequestBody Usersdata user){
          return userService.saveInDb(user);
     }
@@ -50,13 +52,21 @@ public class EmployeeController {
     }
 
     @PostMapping("/checkin")
+    @CrossOrigin(origins = "http://localhost:3000")
     public String checkIn(@RequestBody UserDetails userDetails) {
         System.out.println(userDetails.getUserId());
         return attendanceService.checkIn(userDetails.getUserId());
     }
 
     @PostMapping("/checkout")
+    @CrossOrigin(origins = "http://localhost:3000")
     public String checkOut(@RequestBody UserDetails userDetails) {
         return attendanceService.checkOut(userDetails.getUserId());
+    }
+
+    @PostMapping("/reload")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public AttendanceReloadResponse reload(@RequestBody UserDetails userDetails){
+         return attendanceService.getReloadData(userDetails.getUserId());
     }
 }
