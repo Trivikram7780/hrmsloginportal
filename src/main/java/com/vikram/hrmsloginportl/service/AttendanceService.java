@@ -1,9 +1,11 @@
 package com.vikram.hrmsloginportl.service;
 
 
-import com.vikram.hrmsloginportl.Entity.Attendance;
-import com.vikram.hrmsloginportl.dto.AttendanceReloadResponse;
 import com.vikram.hrmsloginportl.repository.AttendanceRepo;
+import com.vikram.hrmsloginportl.Entity.Attendance;
+import com.vikram.hrmsloginportl.Entity.EmployeeDetails;
+import com.vikram.hrmsloginportl.dto.AttendanceReloadResponse;
+import com.vikram.hrmsloginportl.repository.EmployeeDetailsRepository;
 import com.vikram.hrmsloginportl.repository.MyRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class AttendanceService {
 
     @Autowired
     private AttendanceRepo attendanceRepo;
+
+    @Autowired
+    private EmployeeDetailsRepository employeeDetailsRepository;
 
     @Transactional
     public String checkIn(String userid){
@@ -84,6 +89,10 @@ public class AttendanceService {
 
 
         return new AttendanceReloadResponse(todayCheckin, todayCheckout, lastFiveDaysHours);
+    }
+
+    public EmployeeDetails getProfileByName(String name) {
+        return employeeDetailsRepository.findByName(name);
     }
 
 }

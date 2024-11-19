@@ -3,11 +3,12 @@ package com.vikram.hrmsloginportl.controller;
 
 import com.vikram.hrmsloginportl.Entity.Usersdata;
 import com.vikram.hrmsloginportl.dto.AttendanceReloadResponse;
-import com.vikram.hrmsloginportl.dto.TokenDto;
 import com.vikram.hrmsloginportl.dto.UserDetails;
 import com.vikram.hrmsloginportl.service.AttendanceService;
-import com.vikram.hrmsloginportl.service.JWTService;
 import com.vikram.hrmsloginportl.service.UserService;
+import com.vikram.hrmsloginportl.Entity.EmployeeDetails;
+import com.vikram.hrmsloginportl.dto.TokenDto;
+import com.vikram.hrmsloginportl.service.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +31,11 @@ public class EmployeeController {
 
 
     @PostMapping("/register")
-    @CrossOrigin(origins = "http://localhost:3000")
     public Usersdata registerUser(@RequestBody Usersdata user){
          return userService.saveInDb(user);
     }
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<TokenDto> login(@RequestBody Usersdata user){
         boolean isValidUser = userService.verify(user);
         if(isValidUser)
@@ -52,21 +51,31 @@ public class EmployeeController {
     }
 
     @PostMapping("/checkin")
-    @CrossOrigin(origins = "http://localhost:3000")
     public String checkIn(@RequestBody UserDetails userDetails) {
         System.out.println(userDetails.getUserId());
         return attendanceService.checkIn(userDetails.getUserId());
     }
 
     @PostMapping("/checkout")
-    @CrossOrigin(origins = "http://localhost:3000")
     public String checkOut(@RequestBody UserDetails userDetails) {
         return attendanceService.checkOut(userDetails.getUserId());
     }
 
     @PostMapping("/reload")
-    @CrossOrigin(origins = "http://localhost:3000")
     public AttendanceReloadResponse reload(@RequestBody UserDetails userDetails){
          return attendanceService.getReloadData(userDetails.getUserId());
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "/reload", method = RequestMethod.OPTIONS)
+    public ResponseEntity<Void> handlePreflight() {
+        // Respond to the preflight OPTIONS request
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/profile")
+    public EmployeeDetails profile(@RequestBody UserDetails userDetails){
+        return attendanceService.getProfileByName(userDetails.getUserId());
     }
 }
