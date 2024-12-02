@@ -1,10 +1,13 @@
 package com.vikram.hrmsloginportl.controller;
 
 
+import com.vikram.hrmsloginportl.Entity.Employee;
 import com.vikram.hrmsloginportl.Entity.Usersdata;
 import com.vikram.hrmsloginportl.dto.AttendanceReloadResponse;
+import com.vikram.hrmsloginportl.dto.EmployeeDTO;
 import com.vikram.hrmsloginportl.dto.UserDetails;
 import com.vikram.hrmsloginportl.service.AttendanceService;
+import com.vikram.hrmsloginportl.service.EmployeeService;
 import com.vikram.hrmsloginportl.service.UserService;
 import com.vikram.hrmsloginportl.Entity.EmployeeDetails;
 import com.vikram.hrmsloginportl.dto.TokenDto;
@@ -25,6 +28,9 @@ public class EmployeeController {
 
     @Autowired
     private AttendanceService attendanceService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
 
 
@@ -77,5 +83,23 @@ public class EmployeeController {
     @PostMapping("/profile")
     public EmployeeDetails profile(@RequestBody UserDetails userDetails){
         return attendanceService.getProfileByName(userDetails.getUserId());
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        Employee employee = employeeService.createEmployee(employeeDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(employee);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+        Employee updatedEmployee = employeeService.updateEmployee(id, employeeDTO);
+        return ResponseEntity.ok(updatedEmployee);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.ok("Employee deleted successfully");
     }
 }
