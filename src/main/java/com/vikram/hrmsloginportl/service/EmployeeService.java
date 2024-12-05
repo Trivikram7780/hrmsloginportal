@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -40,6 +41,10 @@ public class EmployeeService {
     }
     public void deleteEmployee(Long id) {
         employeeRepository.deleteById(id);
+    }
+
+    public List<Employee> searchEmployeesByUsername(String username) {
+        return employeeRepository.findByUsernameContainingIgnoreCase(username);
     }
 
     private Employee mapDtoToEntity(EmployeeDTO dto) {
